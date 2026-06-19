@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const { productController } = require('../container');
+const asyncHandler = require('../middlewares/asyncHandler');
 
-const ProductRepository = require('../repositories/productRepository');
-const ProductService = require('../services/productService');
-const ProductController = require('../controllers/productController');
+router
+  .route('/products')
+  .get(asyncHandler(productController.getAllProducts))
+  .post(asyncHandler(productController.createProduct));
 
-const repository = new ProductRepository();
-const service = new ProductService(repository);
-const controller = new ProductController(service);
-
-router.route('/products').get(controller.getAllProducts);
+router
+  .route('/products/:id')
+  .get(asyncHandler(productController.getOneProduct))
+  .put(asyncHandler(productController.updateProduct))
+  .delete(asyncHandler(productController.deleteProduct));
 
 module.exports = router;
