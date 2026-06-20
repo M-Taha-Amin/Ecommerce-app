@@ -2,16 +2,23 @@ const express = require('express');
 const router = express.Router();
 const { productController } = require('../container');
 const asyncHandler = require('../middlewares/asyncHandler');
+const {
+  validateQueryParams,
+  validateCreateProduct,
+  validateUpdateProduct,
+} = require('../middlewares/productValidation');
+const { validateID } = require('../middlewares/validateMongodbID');
 
 router
   .route('/products')
-  .get(asyncHandler(productController.getAllProducts))
-  .post(asyncHandler(productController.createProduct));
+  .get(validateQueryParams, asyncHandler(productController.getAllProducts))
+  .post(validateCreateProduct, asyncHandler(productController.createProduct));
 
 router
   .route('/products/:id')
+  .all(validateID)
   .get(asyncHandler(productController.getOneProduct))
-  .put(asyncHandler(productController.updateProduct))
+  .put(validateUpdateProduct, asyncHandler(productController.updateProduct))
   .delete(asyncHandler(productController.deleteProduct));
 
 module.exports = router;
