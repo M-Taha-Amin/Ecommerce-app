@@ -3,29 +3,29 @@ class BaseRepository {
     this.model = model;
   }
 
-  getAll = async () => {
+  async getAll() {
     return this.model.find();
-  };
+  }
 
-  getOne = async id => {
+  async getOne(id) {
     return this.model.findById(id);
-  };
+  }
 
-  insert = async modelData => {
+  async insert(modelData) {
     const modelInstance = new this.model(modelData);
     await modelInstance.save();
     return modelInstance;
-  };
+  }
 
-  update = async (id, updatedData) => {
+  async update(id, updatedData) {
     return this.model.findByIdAndUpdate(id, updatedData, {
       new: true,
     });
-  };
+  }
 
-  delete = async id => {
+  async delete(id) {
     return this.model.findByIdAndDelete(id);
-  };
+  }
 }
 
 module.exports = BaseRepository;
