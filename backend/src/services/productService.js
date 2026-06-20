@@ -1,3 +1,4 @@
+const { PRODUCTS_PER_PAGE } = require('../constants');
 const ApiError = require('../utils/apiError');
 
 class ProductService {
@@ -5,8 +6,17 @@ class ProductService {
     this.repository = productRepository;
   }
 
-  getAllProducts = async () => {
-    return this.repository.getAll();
+  getAllProducts = async options => {
+    if (options.price_lte && options.price_gte) {
+      if (options.price_gte >= options.price_lte) {
+        throw new ApiError('Invalid price range', 400);
+      }
+    }
+
+    // options.page will always exist, the validation schema will provide a default value of 1 for it if not sent with request
+    options.skip = PRODUCTS_PER_PAGE * (options.page - 1);
+
+    return this.repository.getAll(options);
   };
 
   getOneProduct = async id => {

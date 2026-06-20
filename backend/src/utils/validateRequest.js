@@ -1,10 +1,10 @@
 const z = require('zod');
-const ApiError = require('../utils/apiError');
+const ApiError = require('./apiError');
 
-exports.validateRequest = function (schema, inputObject, next) {
+exports.validate = function (schema, inputObject) {
   const result = schema.safeParse(inputObject);
   if (result.success) {
-    next();
+    return result.data;
   } else {
     throw new ApiError('Bad Request', 400);
   }

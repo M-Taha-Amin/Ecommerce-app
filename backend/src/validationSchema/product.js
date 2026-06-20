@@ -5,10 +5,10 @@ const { PRODUCTS_PER_PAGE } = require('../constants/index');
 // e.g: /api/v1/products?name=mobile&price_lte=20000
 exports.queryParamSchema = z.object({
   name: z.string().optional(),
-  price_gte: z.coerce.number().optional(),
-  price_lte: z.coerce.number().optional(),
+  category: z.string().optional(),
+  price_gte: z.coerce.number().min(0).optional(),
+  price_lte: z.coerce.number().min(0).optional(),
   page: z.coerce.number().default(1),
-  skip: z.coerce.number().default(0),
   limit: z.coerce.number().default(PRODUCTS_PER_PAGE),
 });
 

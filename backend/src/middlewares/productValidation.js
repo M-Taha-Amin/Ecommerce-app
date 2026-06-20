@@ -3,16 +3,19 @@ const {
   createSchema,
   updateSchema,
 } = require('../validationSchema/product');
-const { validateRequest } = require('./validateRequest');
+const { validate } = require('../utils/validateRequest');
 
 exports.validateQueryParams = function (req, res, next) {
-  validateRequest(queryParamSchema, req.query, next);
+  req.validatedDto = validate(queryParamSchema, req.query);
+  next();
 };
 
 exports.validateCreateProduct = function (req, res, next) {
-  validateRequest(createSchema, req.body, next);
+  req.validatedDto = validate(createSchema, req.body);
+  next();
 };
 
 exports.validateUpdateProduct = function (req, res, next) {
-  validateRequest(updateSchema, req.body, next);
+  req.validatedDto = validate(updateSchema, req.body);
+  next();
 };

@@ -6,7 +6,7 @@ class ProductController {
   }
 
   getAllProducts = async (req, res, next) => {
-    const products = await this.productService.getAllProducts();
+    const products = await this.productService.getAllProducts(req.validatedDto);
     return ApiResponse.success(res, 'Products Fetched', products);
   };
 
@@ -17,14 +17,14 @@ class ProductController {
   };
 
   createProduct = async (req, res, next) => {
-    const productData = req.body;
+    const productData = req.validatedDto;
     const newProduct = await this.productService.createProduct(productData);
     return ApiResponse.created(res, 'New Product Added', newProduct);
   };
 
   updateProduct = async (req, res, next) => {
     const { id } = req.params;
-    const updateData = req.body;
+    const updateData = req.validatedDto;
     const updatedProduct = await this.productService.updateProduct(
       id,
       updateData,
