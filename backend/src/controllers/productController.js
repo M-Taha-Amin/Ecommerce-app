@@ -18,6 +18,8 @@ class ProductController {
 
   createProduct = async (req, res, next) => {
     const productData = req.validatedDto;
+    // req.user will always exist, as this is an authenticated route and req will only reach here if user is logged in and is an admin
+    productData.user = req.user._id;
     const newProduct = await this.productService.createProduct(productData);
     return ApiResponse.created(res, 'New Product Added', newProduct);
   };

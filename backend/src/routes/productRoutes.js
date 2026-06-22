@@ -8,13 +8,14 @@ const {
   validateUpdateProduct,
 } = require('../middlewares/productValidation');
 const { validateID } = require('../middlewares/validateMongodbID');
-const { isAuthenticated } = require('../middlewares/authValidation');
+const { isAuthenticated, isAdmin } = require('../middlewares/authValidation');
 
 router
   .route('/products')
   .get(validateQueryParams, asyncHandler(productController.getAllProducts))
   .post(
     isAuthenticated,
+    isAdmin,
     validateCreateProduct,
     asyncHandler(productController.createProduct),
   );
@@ -25,9 +26,14 @@ router
   .get(asyncHandler(productController.getOneProduct))
   .put(
     isAuthenticated,
+    isAdmin,
     validateUpdateProduct,
     asyncHandler(productController.updateProduct),
   )
-  .delete(isAuthenticated, asyncHandler(productController.deleteProduct));
+  .delete(
+    isAuthenticated,
+    isAdmin,
+    asyncHandler(productController.deleteProduct),
+  );
 
 module.exports = router;

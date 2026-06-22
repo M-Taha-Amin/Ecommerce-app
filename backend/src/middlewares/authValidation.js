@@ -29,7 +29,7 @@ function makeIsAuthenticated(AuthService, UserService) {
     if (!user) {
       throw new ApiError('Unauthorized', 401);
     }
-    
+
     req.user = user;
 
     next();
@@ -37,3 +37,10 @@ function makeIsAuthenticated(AuthService, UserService) {
 }
 
 exports.isAuthenticated = makeIsAuthenticated(authService, userService);
+
+// This middleware will only run if the user has been authenticated, which means req.user will always exist
+exports.isAdmin = function (req, res, next) {
+  if (req.user.role.toLowerCase() !== 'admin') {
+    throw new ApiError('Forbidden', 403);
+  } else next();
+};
