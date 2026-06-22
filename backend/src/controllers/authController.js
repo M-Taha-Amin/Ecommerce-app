@@ -1,5 +1,6 @@
 const config = require('../config');
 const ApiResponse = require('../utils/apiResponse');
+const { setAuthCookie, clearAuthCookie } = require('../utils/auth');
 
 class AuthController {
   constructor(authService, userService) {
@@ -10,10 +11,7 @@ class AuthController {
   register = async (req, res, next) => {
     const newUser = await this.userService.createUser(req.validatedDto);
     const accessToken = this.authService.createAccessToken(newUser._id);
-    res.cookie('access_token', accessToken, {
-      maxAge: config.authCookie.maxAge,
-      httpOnly: true,
-    });
+    setAuthCookie(res, accessToken);
     return ApiResponse.created(res, 'User Registered', newUser);
   };
 
@@ -21,17 +19,12 @@ class AuthController {
     // verifies user exists and password is valid. If validated, returns the valid user from database
     const user = await this.userService.verifyCredentials(req.validatedDto);
     const accessToken = this.authService.createAccessToken(user._id);
-    res.cookie('access_token', accessToken, {
-      maxAge: config.authCookie.maxAge,
-      httpOnly: true,
-    });
+    setAuthCookie(res, accessToken);
     return ApiResponse.success(res, 'User Logged In', user);
   };
 
   logout = async (req, res, next) => {
-    res.clearCookie('access_token', {
-      httpOnly: true,
-    });
+    clearAuthCookie(res);
     return ApiResponse.success(res, 'Logged Out');
   };
 }
