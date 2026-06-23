@@ -5,7 +5,7 @@ class ApiResponse {
     return res.status(statusCode).json(response);
   };
 
-  static success = (res, message, payload = {}) => {
+  static success = (res, message, payload) => {
     return this.generic(res, 200, message, true, payload);
   };
 
