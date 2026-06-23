@@ -4,6 +4,9 @@ const { validate } = require('../utils/validateRequest');
 const {
   registerUserSchema,
   loginUserSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyOtpSchema,
 } = require('../validationSchema/auth');
 const asyncHandler = require('./asyncHandler');
 
@@ -14,6 +17,21 @@ exports.validateRegister = function (req, res, next) {
 
 exports.validateLogin = function (req, res, next) {
   req.validatedDto = validate(loginUserSchema, req.body);
+  next();
+};
+
+exports.validateForgotPassword = function (req, res, next) {
+  req.validatedDto = validate(forgotPasswordSchema, req.body);
+  next();
+};
+
+exports.validateVerifyOtp = function (req, res, next) {
+  req.validatedDto = validate(verifyOtpSchema, req.body);
+  next();
+};
+
+exports.validateResetPassword = function (req, res, next) {
+  req.validatedDto = validate(resetPasswordSchema, req.body);
   next();
 };
 

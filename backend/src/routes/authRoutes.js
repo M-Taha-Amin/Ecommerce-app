@@ -6,6 +6,9 @@ const {
   validateRegister,
   validateLogin,
   isAuthenticated,
+  validateForgotPassword,
+  validateResetPassword,
+  validateVerifyOtp,
 } = require('../middlewares/authValidation');
 
 router
@@ -17,5 +20,14 @@ router
 router
   .route('/auth/logout')
   .post(isAuthenticated, asyncHandler(authController.logout));
+router
+  .route('/auth/forgot-password')
+  .post(validateForgotPassword, asyncHandler(authController.forgotPassword));
+router
+  .route('/auth/verify-otp')
+  .post(validateVerifyOtp, asyncHandler(authController.verifyOtp));
+router
+  .route('/auth/reset-password')
+  .post(validateResetPassword, asyncHandler(authController.resetPassword));
 
 module.exports = router;

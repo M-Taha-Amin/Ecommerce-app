@@ -1,31 +1,49 @@
-const config = require('../config');
 const ApiResponse = require('../utils/apiResponse');
 const { setAuthCookie, clearAuthCookie } = require('../utils/auth');
 
 class AuthController {
-  constructor(authService, userService) {
+  constructor(authService) {
     this.authService = authService;
-    this.userService = userService;
   }
 
-  register = async (req, res, next) => {
-    const newUser = await this.userService.createUser(req.validatedDto);
-    const accessToken = this.authService.createAccessToken(newUser._id);
+  register = async (req, res) => {
+    const { newUser, accessToken } = await this.authService.register(
+      req.validatedDto,
+    );
     setAuthCookie(res, accessToken);
     return ApiResponse.created(res, 'User Registered', newUser);
   };
 
-  login = async (req, res, next) => {
-    // verifies user exists and password is valid. If validated, returns the valid user from database
-    const user = await this.userService.verifyCredentials(req.validatedDto);
-    const accessToken = this.authService.createAccessToken(user._id);
+  login = async (req, res) => {
+    const { user, accessToken } = await this.authService.login(
+      req.validatedDto,
+    );
     setAuthCookie(res, accessToken);
     return ApiResponse.success(res, 'User Logged In', user);
   };
 
-  logout = async (req, res, next) => {
+  logout = async (req, res) => {
     clearAuthCookie(res);
     return ApiResponse.success(res, 'Logged Out');
+  };
+
+  forgotPassword = async (req, res) => {
+    const { email } = req.validatedDto;
+    await this.authService.forgotPassword(email);
+    return ApiResponse.success(res, 'OTP sent to your Email Address');
+  };
+
+  verifyOtp = async (req, res) => {
+    await this.authService.verifyOtp(req.validatedDto);
+    return ApiResponse.success(res, 'OTP verified');
+  };
+
+  resetPassword = async (req, res) => {
+    const { user, accessToken } = await this.authService.resetPassword(
+      req.validatedDto,
+    );
+    setAuthCookie(res, accessToken);
+    return ApiResponse.success(res, 'Password Reset');
   };
 }
 

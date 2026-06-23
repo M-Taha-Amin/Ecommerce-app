@@ -20,16 +20,7 @@ class UserService {
   }
 
   async verifyCredentials(currentUser) {
-    const existingUser = await this.repository.getUserByEmail(
-      currentUser.email,
-      {
-        select: '+password',
-      },
-    );
-
-    if (!existingUser) {
-      throw new ApiError('Unauthorized', 401);
-    }
+    const existingUser = await this.verifyEmailExists(currentUser.email);
 
     const validPassword = await bcrypt.compare(
       currentUser.password,
@@ -37,7 +28,7 @@ class UserService {
     );
 
     if (!validPassword) {
-      throw new ApiError('Unauthorized', 401);
+      throw new ApiError('Invalid Email or Password', 401);
     }
 
     return existingUser;
@@ -45,6 +36,25 @@ class UserService {
 
   async getUserById(userId) {
     return this.repository.getOne(userId);
+  }
+
+  async verifyEmailExists(email) {
+    const user = await this.repository.getUserByEmail(email, {
+      select: '+password',
+    });
+    if (!user) {
+      throw new ApiError('Invalid Email or Password', 401);
+    }
+    return user;
+  }
+
+  async resetPassword(userData) {
+    const { email, newPassword, confirmPassword } = userData;
+    if (newPassword !== confirmPassword) {
+      throw new ApiError('Passwords do not match', 400);
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    return this.repository.updatePassword(email, hashedPassword);
   }
 }
 

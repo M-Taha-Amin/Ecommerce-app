@@ -11,6 +11,13 @@ class UserRepository extends BaseRepository {
     if (select) query = query.select(select);
     return query.exec();
   }
+
+  async updatePassword(email, password) {
+    const user = await this.getUserByEmail(email);
+    user.password = password;
+    await user.save();
+    return user;
+  }
 }
 
 module.exports = UserRepository;

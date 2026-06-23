@@ -16,3 +16,19 @@ exports.loginUserSchema = z.object({
   email: z.email(),
   password: z.string().min(8),
 });
+
+exports.forgotPasswordSchema = z.object({
+  email: z.email(),
+});
+
+exports.verifyOtpSchema = z.object({
+  otp: z.coerce.string().length(6),
+  email: z.email(),
+});
+
+exports.resetPasswordSchema = z.object({
+  otp: z.coerce.string().length(6),
+  email: z.email(),
+  newPassword: z.string().min(8),
+  confirmPassword: z.string().min(8),
+});
