@@ -29,5 +29,8 @@ router
 router
   .route('/auth/reset-password')
   .post(validateResetPassword, asyncHandler(authController.resetPassword));
+router
+  .route('/auth/me')
+  .post(isAuthenticated, asyncHandler(authController.getMe));
 
 module.exports = router;

@@ -45,6 +45,10 @@ class AuthController {
     setAuthCookie(res, accessToken);
     return ApiResponse.success(res, 'Password Reset');
   };
+
+  getMe = async (req, res) => {
+    return ApiResponse.success(res, 'Logged in User sent', req.user);
+  };
 }
 
 module.exports = AuthController;
