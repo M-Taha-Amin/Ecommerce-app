@@ -24,7 +24,7 @@ router
   .route('/products/:id')
   .all(validateID)
   .get(asyncHandler(productController.getOneProduct))
-  .put(
+  .patch(
     isAuthenticated,
     isAdmin,
     validateUpdateProduct,
