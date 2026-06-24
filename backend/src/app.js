@@ -1,6 +1,7 @@
 const express = require('express');
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 const config = require('./config');
 const errorHandler = require('./middlewares/errorHandler');
 const cookieParser = require('cookie-parser');
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use(config.api.prefix, productRoutes);
 app.use(config.api.prefix, authRoutes);
+app.use(config.api.prefix, userRoutes);
 app.use(errorHandler);
 
 app.get('/', (req, res) => {

@@ -8,6 +8,7 @@ const ProductController = require('./controllers/productController');
 const userModel = require('./models/userModel');
 const UserRepository = require('./repositories/userRepository');
 const UserService = require('./services/userService');
+const UserController = require('./controllers/userController');
 
 // Auth Imports
 const AuthService = require('./services/authService');
@@ -30,6 +31,7 @@ const productController = new ProductController(productService);
 // User Dependency Injection
 const userRepository = new UserRepository(userModel);
 const userService = new UserService(userRepository);
+const userController = new UserController(userService);
 
 // Otp Dependency Injection
 const otpRepository = new OtpRepository(otpModel);
@@ -45,6 +47,7 @@ const authController = new AuthController(authService);
 module.exports = {
   productController,
   authController,
+  userController,
   authService,
   userService,
 };

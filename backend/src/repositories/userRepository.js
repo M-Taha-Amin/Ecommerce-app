@@ -5,6 +5,16 @@ class UserRepository extends BaseRepository {
     super(model);
   }
 
+  async getAll(adminId, options = {}) {
+    const { excludeSelf = false } = options;
+    if (excludeSelf === true) {
+      return this.model.find({
+        _id: { $ne: adminId },
+      });
+    }
+    return this.model.find();
+  }
+
   async getUserByEmail(userEmail, options = {}) {
     const { select } = options;
     let query = this.model.findOne({ email: userEmail });
