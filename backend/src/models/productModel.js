@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ApiError = require('../utils/apiError');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -61,6 +62,11 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+productSchema.pre('findOneAndDelete', async function () {
+  const { _id: productId } = this.getFilter();
+  await mongoose.model('Review').deleteMany({ productId: productId });
 });
 
 module.exports = mongoose.model('Product', productSchema);
