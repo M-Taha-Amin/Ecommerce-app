@@ -6,8 +6,9 @@ const {
   validateQueryParams,
   validateCreateProduct,
   validateUpdateProduct,
+  validateAddReview,
 } = require('../middlewares/productValidation');
-const { validateID } = require('../middlewares/validateMongodbID');
+const { validateID, validateIDs } = require('../middlewares/validateMongodbID');
 const { isAuthenticated, isAdmin } = require('../middlewares/authValidation');
 
 router
@@ -21,7 +22,7 @@ router
   );
 
 router
-  .route('/products/:id')
+  .route('/products/:productId')
   .all(validateID)
   .get(asyncHandler(productController.getOneProduct))
   .patch(
@@ -34,6 +35,25 @@ router
     isAuthenticated,
     isAdmin,
     asyncHandler(productController.deleteProduct),
+  );
+
+router
+  .route('/products/:productId/reviews')
+  .all(validateID)
+  .get(asyncHandler(productController.getAllReviews))
+  // Adds the review, but if exists already then updates existing one
+  .post(
+    isAuthenticated,
+    validateAddReview,
+    asyncHandler(productController.addReview),
+  );
+
+router
+  .route('/products/:productId/reviews/:reviewId')
+  .delete(
+    validateID,
+    isAuthenticated,
+    asyncHandler(productController.deleteReview),
   );
 
 module.exports = router;

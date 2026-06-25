@@ -11,8 +11,8 @@ class ProductController {
   };
 
   getOneProduct = async (req, res, next) => {
-    const { id } = req.params;
-    const product = await this.productService.getOneProduct(id);
+    const { productId } = req.params;
+    const product = await this.productService.getOneProduct(productId);
     return ApiResponse.success(res, 'Product Found', product);
   };
 
@@ -25,19 +25,42 @@ class ProductController {
   };
 
   updateProduct = async (req, res, next) => {
-    const { id } = req.params;
+    const { productId } = req.params;
     const updateData = req.validatedDto;
     const updatedProduct = await this.productService.updateProduct(
-      id,
+      productId,
       updateData,
     );
     return ApiResponse.success(res, 'Product Updated', updatedProduct);
   };
 
   deleteProduct = async (req, res, next) => {
-    const { id } = req.params;
-    await this.productService.deleteProduct(id);
+    const { productId } = req.params;
+    await this.productService.deleteProduct(productId);
     return ApiResponse.noContent(res, 'Product Deleted');
+  };
+
+  getAllReviews = async (req, res, next) => {
+    const { productId } = req.params;
+    const reviews = await this.productService.getAllReviews(productId);
+    return ApiResponse.success(res, 'Reviews Fetched', reviews);
+  };
+
+  addReview = async (req, res, next) => {
+    const { productId } = req.params;
+
+    const reviews = await this.productService.addReview(
+      productId,
+      req.user,
+      req.validatedDto,
+    );
+    return ApiResponse.success(res, 'Review Added', reviews);
+  };
+
+  deleteReview = async (req, res, next) => {
+    const { productId, reviewId } = req.params;
+    await this.productService.deleteReview(productId, req.user, reviewId);
+    return ApiResponse.noContent(res, 'Review Deleted');
   };
 }
 
