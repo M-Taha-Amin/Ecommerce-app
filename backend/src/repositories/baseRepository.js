@@ -3,12 +3,16 @@ class BaseRepository {
     this.model = model;
   }
 
-  async getAll() {
-    return this.model.find();
+  async getAll(filters = {}) {
+    return this.model.find(filters);
   }
 
   async getOne(id) {
     return this.model.findById(id);
+  }
+
+  async count(filters = {}) {
+    return this.model.countDocuments(filters);
   }
 
   async insert(modelData) {
@@ -19,12 +23,16 @@ class BaseRepository {
 
   async update(id, updatedData) {
     return this.model.findByIdAndUpdate(id, updatedData, {
-      returnDocument: 'after'
+      returnDocument: 'after',
     });
   }
 
   async delete(id) {
     return this.model.findByIdAndDelete(id);
+  }
+
+  async deleteMany(filters = {}) {
+    return this.model.deleteMany(filters);
   }
 }
 
