@@ -19,7 +19,7 @@ class BaseRepository {
 
   async update(id, updatedData) {
     return this.model.findByIdAndUpdate(id, updatedData, {
-      new: true,
+      returnDocument: 'after'
     });
   }
 
