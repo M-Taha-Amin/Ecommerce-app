@@ -22,12 +22,6 @@ class ProductRepository extends BaseRepository {
     // limit and skip will always exist, validation provides defaults if they don't
     return await this.model.find(filters).limit(limit).skip(skip);
   }
-
-  async deleteReview(productId, reviewId) {
-    return this.update(productId, {
-      $pull: { reviews: { _id: reviewId } },
-    });
-  }
 }
 
 module.exports = ProductRepository;

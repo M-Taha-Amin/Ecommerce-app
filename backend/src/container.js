@@ -23,10 +23,21 @@ const otpModel = require('./models/otpModel');
 const OtpRepository = require('./repositories/otpRepository');
 const OtpService = require('./services/otpService');
 
+// Review Imports
+const reviewModel = require('./models/reviewModel');
+const ReviewRepository = require('./repositories/reviewRepository');
+const ReviewService = require('./services/reviewService');
+const ReviewController = require('./controllers/reviewController');
+
 // Product Dependency Injection
 const productRepository = new ProductRepository(productModel);
 const productService = new ProductService(productRepository);
 const productController = new ProductController(productService);
+
+// Review Dependency Injection
+const reviewRepository = new ReviewRepository(reviewModel);
+const reviewService = new ReviewService(reviewRepository, productService);
+const reviewController = new ReviewController(reviewService);
 
 // User Dependency Injection
 const userRepository = new UserRepository(userModel);
@@ -48,6 +59,7 @@ module.exports = {
   productController,
   authController,
   userController,
+  reviewController,
   authService,
   userService,
 };

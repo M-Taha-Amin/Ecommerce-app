@@ -20,8 +20,3 @@ exports.validateUpdateProduct = function (req, res, next) {
   req.validatedDto = validate(updateSchema, req.body);
   next();
 };
-
-exports.validateAddReview = function (req, res, next) {
-  req.validatedDto = validate(addReviewSchema, req.body);
-  next();
-};

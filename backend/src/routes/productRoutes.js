@@ -37,23 +37,4 @@ router
     asyncHandler(productController.deleteProduct),
   );
 
-router
-  .route('/products/:productId/reviews')
-  .all(validateID)
-  .get(asyncHandler(productController.getAllReviews))
-  // Adds the review, but if exists already then updates existing one
-  .post(
-    isAuthenticated,
-    validateAddReview,
-    asyncHandler(productController.addReview),
-  );
-
-router
-  .route('/products/:productId/reviews/:reviewId')
-  .delete(
-    validateID,
-    isAuthenticated,
-    asyncHandler(productController.deleteReview),
-  );
-
 module.exports = router;

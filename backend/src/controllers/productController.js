@@ -19,7 +19,7 @@ class ProductController {
   createProduct = async (req, res, next) => {
     const productData = req.validatedDto;
     // req.user will always exist, as this is an authenticated route and req will only reach here if user is logged in and is an admin
-    productData.user = req.user._id;
+    productData.adminId = req.user._id;
     const newProduct = await this.productService.createProduct(productData);
     return ApiResponse.created(res, 'New Product Added', newProduct);
   };
@@ -38,29 +38,6 @@ class ProductController {
     const { productId } = req.params;
     await this.productService.deleteProduct(productId);
     return ApiResponse.noContent(res, 'Product Deleted');
-  };
-
-  getAllReviews = async (req, res, next) => {
-    const { productId } = req.params;
-    const reviews = await this.productService.getAllReviews(productId);
-    return ApiResponse.success(res, 'Reviews Fetched', reviews);
-  };
-
-  addReview = async (req, res, next) => {
-    const { productId } = req.params;
-
-    const reviews = await this.productService.addReview(
-      productId,
-      req.user,
-      req.validatedDto,
-    );
-    return ApiResponse.success(res, 'Review Added', reviews);
-  };
-
-  deleteReview = async (req, res, next) => {
-    const { productId, reviewId } = req.params;
-    await this.productService.deleteReview(productId, req.user, reviewId);
-    return ApiResponse.noContent(res, 'Review Deleted');
   };
 }
 

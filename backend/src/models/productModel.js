@@ -40,38 +40,24 @@ const productSchema = new mongoose.Schema({
     default: 1,
     maxLength: [4, 'Product Stock cannot be more than 4 digits'],
   },
-  num_of_reviews: {
-    type: Number,
-    default: 0,
-  },
-  reviews: [
-    {
-      user: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: true,
-      },
-      name: {
-        type: String,
-        required: true,
-      },
-      rating: {
-        type: Number,
-        required: true,
-      },
-      comment: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
-  // the admin who added this product
-  user: {
+  adminId: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
     required: true,
   },
-  created_at: {
+  ratingSum: {
+    type: Number,
+    default: 0,
+  },
+  reviewCount: {
+    type: Number,
+    default: 0,
+  },
+  rating: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
     type: Date,
     default: Date.now,
   },
